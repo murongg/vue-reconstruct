@@ -1,5 +1,5 @@
 {
-  "name": "@vue-reconstruct/core",
+  "name": "@vue-reconstruct/pinia",
   "version": "0.0.0",
   "description": "",
   "license": "MIT",
@@ -7,8 +7,5 @@
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "@vue-reconstruct/shared": "workspace:*"
   }
 }

@@ -1,0 +1,23 @@
+{
+  "name": "@vue-reconstruct/playground",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build --base=/vue-reconstruct/ && node removeFlowparser",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vue-reconstruct/composition-api": "workspace:*",
+    "codemirror": "^5.65.0",
+    "vue": "^3.2.25"
+  },
+  "devDependencies": {
+    "@types/codemirror": "^5.60.5",
+    "@types/node": "^17.0.8",
+    "@vitejs/plugin-vue": "^2.0.0",
+    "assert": "^2.0.0",
+    "typescript": "^4.4.4",
+    "vite": "^2.7.2",
+    "vue-tsc": "^0.29.8"
+  }
+}

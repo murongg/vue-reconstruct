@@ -1,5 +1,5 @@
 {
-  "name": "@vue-reconstruct/core",
+  "name": "@vue-reconstruct/composition-api",
   "version": "0.0.0",
   "description": "",
   "license": "MIT",
@@ -9,6 +9,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@vue-reconstruct/shared": "workspace:*"
+    "@vue-reconstruct/core": "workspace:*"
   }
 }

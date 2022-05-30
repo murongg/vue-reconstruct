@@ -1,8 +1,9 @@
 import { defineBuildConfig } from 'unbuild'
+import fg from 'fast-glob'
 
 export default defineBuildConfig({
   entries: [
-    'src/index',
+    ...fg.sync('packages/*/index.ts')
   ],
   declaration: true,
   clean: true,

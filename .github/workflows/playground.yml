@@ -43,7 +43,7 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: pnpm run docs:build
+        run: pnpm run playground:build
 
       - name: 📂 Sync files
         uses: crazy-max/ghaction-github-pages@v2

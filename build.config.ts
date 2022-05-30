@@ -3,7 +3,7 @@ import fg from 'fast-glob'
 
 export default defineBuildConfig({
   entries: [
-    ...fg.sync('packages/*/index.ts')
+    ...fg.sync('packages/*/index.ts'),
   ],
   declaration: true,
   clean: true,

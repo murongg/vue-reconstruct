@@ -53,6 +53,7 @@ export function lifecyclesHandler(
 
       if (name === 'created') {
         setupFn.body.body.push(nodeValue.body.body[0])
+        setupFn.async = nodeValue.async
       }
       else {
         const hookName = hookList[name]

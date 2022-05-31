@@ -1,6 +1,8 @@
-import j, { ASTPath } from 'jscodeshift'
+import type { ASTPath } from 'jscodeshift'
+import j from 'jscodeshift'
 
 export function transformThis(astCollection: j.Collection, variables: string[], valueWrappers: string[], isSfc?: boolean) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const removeThis = (path: ASTPath<j.MemberExpression>, i: number, paths: ASTPath<j.MemberExpression>[]) => {
     const property = path.value.property as j.Identifier
     if (j.ThisExpression.check(path.value.object)
@@ -18,7 +20,8 @@ export function transformThis(astCollection: j.Collection, variables: string[], 
     astCollection
       .find(j.MemberExpression)
       .forEach(removeThis)
-  } else {
+  }
+  else {
     astCollection
       .find(j.MethodDefinition, {
         key: {

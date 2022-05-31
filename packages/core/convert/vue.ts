@@ -1,5 +1,7 @@
-import j, { Collection } from "jscodeshift"
-import { computedHandler, dataHandler, importHandler, lifecyclesHandler, LIFECYCLE_HOOKS, methodsHandler, ROUTER_HOOKS, SetupState, transformThis, watchHandler } from ".."
+import type { Collection } from 'jscodeshift'
+import j from 'jscodeshift'
+import type { SetupState } from '..'
+import { LIFECYCLE_HOOKS, ROUTER_HOOKS, computedHandler, dataHandler, importHandler, lifecyclesHandler, methodsHandler, transformThis, watchHandler } from '..'
 
 export function createVueConvert(code: string, methods: boolean, isSfc?: boolean): Collection {
   const setupState: SetupState = {
@@ -42,7 +44,8 @@ export function createVueConvert(code: string, methods: boolean, isSfc?: boolean
   if (setupState.setupFn.body.body.length) {
     if (isSfc) {
       astCollection.find(j.ExportDefaultDeclaration).remove().insertBefore(setupState.setupFn.body.body)
-    } else {
+    }
+    else {
       setupState.setupFn.body.body.push(setupState.returnStatement);
       (componentDefinition.declaration as j.ObjectExpression).properties.push(
         j.methodDefinition(
@@ -54,7 +57,6 @@ export function createVueConvert(code: string, methods: boolean, isSfc?: boolean
     }
     // Remove `this`
     transformThis(astCollection, setupState.variables, setupState.valueWrappers, isSfc)
-
   }
   return astCollection
 }

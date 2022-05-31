@@ -1,6 +1,6 @@
 import j from 'jscodeshift'
-import type { SetupState } from '../types'
 import { hasComplexType } from '@vue-reconstruct/shared'
+import type { SetupState } from '../types'
 export function dataHandler(astCollection: j.Collection, setupState: SetupState): j.Collection {
   const dataOptionCollection = astCollection
     .find(j.Property, {
@@ -31,11 +31,10 @@ export function dataHandler(astCollection: j.Collection, setupState: SetupState)
         ...
       }
      */
-    dataOptionCollection.find(j.FunctionExpression).forEach(path => {
-      path.value.body.body.forEach(body => {
-        if (body.type !== 'ReturnStatement') {
+    dataOptionCollection.find(j.FunctionExpression).forEach((path) => {
+      path.value.body.body.forEach((body) => {
+        if (body.type !== 'ReturnStatement')
           setupState.setupFn.body.body.push(body)
-        }
       })
     })
     /*

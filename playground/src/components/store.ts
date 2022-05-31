@@ -1,43 +1,43 @@
 import { reactive, watch } from 'vue'
-import { convertScript } from '@vue-reconstruct/composition-api'
+import { convertScript as compositionConvertScript } from '@vue-reconstruct/composition-api'
+import { convertScript as sfcConvertScript } from '@vue-reconstruct/sfc'
 
 const welcomeCode = `
+import searchBar from 'xxx'
 export default {
-  data() {
-    return {
-      foo: 'bar',
-    }
-  } ,
-  watch: {
-    foo(newVal, oldVal) {
-      // do something...
-    }
+  components: {
+    searchBar,
   },
-  computed: {
-    foofoo() {
-      return foo;
-    },
-    abs: {
-      get() {
-        // do something...
-      },
-      set(val) {
-        // do someting...
-      }
-    }
+  data() {
+    const host =
+      workEnv === "local"
+        ? "local"
+        : "xxx";
+    return {
+      host,
+      scrollTop: 0,
+      bannerList: [],
+    };
+  },
+  async mounted() {
+    await this.fetchBannerList();
   },
   methods: {
-    change() {
-      const a = 1;
-    }
+    async fetchBannerList() {
+      await this.$http
+        .post("xxxx")
+        .then((res) => {
+          if (res.body.code == 200) {
+            const result = res.body;
+            this.bannerList = result.data;
+          }
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
+    },
   },
-  created() {
-    foo = 1;
-  },
-  mounted() {
-    foo = 2;
-  }
-}
+};
 `.trim()
 
 export class File {
@@ -58,6 +58,7 @@ export class File {
 export interface StoreState {
   code: string
   convertedCode: string
+  type: string
 }
 
 export class ReplStore {
@@ -67,21 +68,36 @@ export class ReplStore {
     this.state = reactive({
       code: welcomeCode,
       convertedCode: '',
+      type: 'sfc'
     })
+
 
     watch(
       () => this.state.code,
       () => {
-        try {
-          this.state.convertedCode = convertScript(this.state.code)
-        }
-        catch (err) {
-          console.log(err)
-        }
+        this.changeCode()
       },
       {
         immediate: true,
       },
     )
+  }
+
+  changeCode() {
+    try {
+      switch (this.state.type) {
+        case 'composition-api':
+          this.state.convertedCode = compositionConvertScript(this.state.code)
+          break;
+        case 'sfc':
+          this.state.convertedCode = sfcConvertScript(this.state.code)
+          break;
+        default:
+          break;
+      }
+    }
+    catch (err) {
+      console.log(err)
+    }
   }
 }

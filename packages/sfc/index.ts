@@ -1,2 +1,4 @@
-export const one = 1
-export const two = 2
+import { createVueConvert } from '@vue-reconstruct/core'
+export function convertScript(code: string, methods?: boolean) {
+  return createVueConvert(code, !!methods, true).toSource()
+}

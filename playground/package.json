@@ -8,7 +8,9 @@
   },
   "dependencies": {
     "@vue-reconstruct/composition-api": "workspace:*",
+    "@vue-reconstruct/sfc": "workspace:*",
     "codemirror": "^5.65.0",
+    "unocss": "^0.37.0",
     "vue": "^3.2.25"
   },
   "devDependencies": {

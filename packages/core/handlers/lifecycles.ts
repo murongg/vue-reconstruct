@@ -49,16 +49,20 @@ export function lifecyclesHandler(
       return Object.keys(hookList).includes((path.value.key as j.Identifier).name)
     }).forEach((path) => {
       const name = (path.node.key as j.Identifier).name
+      const nodeValue = path.node.value as j.FunctionExpression
+
       if (name === 'created') {
-        setupFn.body.body.push((path.node.value as j.FunctionExpression).body.body[0])
+        setupFn.body.body.push(nodeValue.body.body[0])
       }
       else {
         const hookName = hookList[name]
         importList.push(hookName)
+        const arrowFunction = j.arrowFunctionExpression([], nodeValue.body)
+        arrowFunction.async = nodeValue.async
         setupFn.body.body.push(j.expressionStatement(
           j.callExpression(
             j.identifier(hookName),
-            [j.arrowFunctionExpression([], (path.node.value as j.FunctionExpression).body)],
+            [arrowFunction],
           ),
         ))
       }

@@ -1,33 +1,53 @@
 <script lang="ts" setup>
-import { provide } from 'vue'
+import { provide, ref } from 'vue'
 import { ReplStore } from './components/store'
 import Outputor from './components/output.vue'
 import Editor from './components/Editor.vue'
 
-provide('store', new ReplStore())
+const replStore = new ReplStore()
+
+provide('store', replStore)
+
+const handleSelectChange = () => {
+  replStore.changeCode()
+}
 
 </script>
 
 <template>
-  <div id="app">
-    <div class="left">
-      <editor />
-    </div>
-    <div class="right">
-      <outputor />
+  <div class="flex flex-col">
+
+    <header class="w-screen h-13 mb-2 flex items-center px-3" style="background-color: #42b883">
+      <select @change="handleSelectChange" v-model="replStore.state.type">
+        <option value="composition-api">composition-api</option>
+        <option value="sfc">sfc</option>
+      </select>
+    </header>
+
+    <div id="app">
+      <div class="left">
+        <editor />
+      </div>
+      <div class="right">
+        <outputor />
+      </div>
     </div>
   </div>
+
 </template>
 
 <style>
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   font-family: Avenir, Helvetica, Arial, sans-serif;
 }
+
 #app {
   display: flex;
-  height: 100%;width: 100%;
+  height: 100%;
+  width: 100%;
   --bg: #fff;
   --bg-soft: #f8f8f8;
   --border: #ddd;
@@ -44,7 +64,9 @@ html, body {
   overflow: hidden;
   background-color: var(--bg-soft);
 }
-.left, .right {
+
+.left,
+.right {
   flex: 0 0 50%;
 }
 

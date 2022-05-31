@@ -1,6 +1,6 @@
 import j from 'jscodeshift'
 import type { SetupState } from '../types'
-
+import { hasComplexType } from '@vue-reconstruct/shared'
 export function dataHandler(astCollection: j.Collection, setupState: SetupState): j.Collection {
   const dataOptionCollection = astCollection
     .find(j.Property, {
@@ -23,6 +23,21 @@ export function dataHandler(astCollection: j.Collection, setupState: SetupState)
     if (!j.ReturnStatement.check(returnStatement))
       throw new Error('No return statement found in data option')
 
+    /**
+     * Except for ReturnStatement
+      data() {
+        const host = xxx;
+        function a() {};
+        ...
+      }
+     */
+    dataOptionCollection.find(j.FunctionExpression).forEach(path => {
+      path.value.body.body.forEach(body => {
+        if (body.type !== 'ReturnStatement') {
+          setupState.setupFn.body.body.push(body)
+        }
+      })
+    })
     /*
       data () {
         return 'not return an object'
@@ -50,7 +65,7 @@ export function dataHandler(astCollection: j.Collection, setupState: SetupState)
     = objectProperties.map(node => ({
       name: (node.key as j.Identifier).name,
       value: node.value,
-      state: j.ObjectExpression.check(node.value),
+      state: hasComplexType(node.value),
     }))
 
   if (dataProperties.length) {

@@ -1,8 +1,8 @@
 import j from 'jscodeshift'
 import { buildArrowFunctionExpression } from '@vue-reconstruct/shared'
-import type { SetupState } from '../types'
+import type { Collector } from '../types'
 
-export function computedHandler(astCollection: j.Collection, setupState: SetupState): j.Collection {
+export function computedHandler(astCollection: j.Collection, collector: Collector): j.Collection {
   const computedOptionCollection = astCollection
     .find(j.Property, {
       key: {
@@ -13,7 +13,7 @@ export function computedHandler(astCollection: j.Collection, setupState: SetupSt
   const computedOption = computedOptionCollection.nodes()[0]
 
   if (computedOption) {
-    setupState.newImports.vue.push('computed')
+    collector.newImports.vue.push('computed')
     if (!j.ObjectExpression.check(computedOption.value))
       throw new Error('No return statement found in computed option')
 
@@ -44,7 +44,7 @@ export function computedHandler(astCollection: j.Collection, setupState: SetupSt
         }
 
         const name = (property.key as j.Identifier).name
-        setupState.setupFn.body.body.push(
+        collector.setupFn.body.body.push(
           j.variableDeclaration('const', [
             j.variableDeclarator(
               j.identifier(name),
@@ -56,11 +56,11 @@ export function computedHandler(astCollection: j.Collection, setupState: SetupSt
           ]),
         );
 
-        (setupState.returnStatement.argument as j.ObjectExpression).properties.push(
+        (collector.returnStatement.argument as j.ObjectExpression).properties.push(
           j.property('init', j.identifier(name), j.identifier(name)),
         )
-        setupState.variables.push(name)
-        setupState.valueWrappers.push(name)
+        collector.variables.push(name)
+        collector.valueWrappers.push(name)
       })
     })
   }

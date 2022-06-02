@@ -52,7 +52,9 @@ export function lifecyclesHandler(
       const nodeValue = path.node.value as j.FunctionExpression
 
       if (name === 'created') {
-        setupFn.body.body.push(nodeValue.body.body[0])
+        nodeValue.body.body.forEach((b) => {
+          setupFn.body.body.push(b)
+        })
         setupFn.async = nodeValue.async
       }
       else {

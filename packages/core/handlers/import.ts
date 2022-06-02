@@ -1,7 +1,7 @@
 import j from 'jscodeshift'
-import type { SetupState } from '../types'
+import type { Collector } from '../types'
 
-export function importHandler(astCollection: j.Collection, setupState: SetupState): j.Collection {
+export function importHandler(astCollection: j.Collection, collector: Collector): j.Collection {
   function importInsert(key: string, importKeys: string[]) {
     if (!importKeys.length)
       return
@@ -11,8 +11,8 @@ export function importHandler(astCollection: j.Collection, setupState: SetupStat
     astCollection.find(j.ExportDefaultDeclaration).insertBefore(imports)
   }
 
-  importInsert('vue', [...new Set(setupState.newImports.vue)])
-  importInsert('vue-router', [...new Set(setupState.newImports['vue-router'])])
+  importInsert('vue', [...new Set(collector.newImports.vue)])
+  importInsert('vue-router', [...new Set(collector.newImports['vue-router'])])
 
   return astCollection
 }

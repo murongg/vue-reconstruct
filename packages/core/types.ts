@@ -1,6 +1,6 @@
 import type j from 'jscodeshift'
 
-interface SetupState {
+interface Collector {
   newImports: {
     vue: string[]
     'vue-router': string[]
@@ -9,9 +9,11 @@ interface SetupState {
   setupFn: j.FunctionExpression
   valueWrappers: string[]
   variables: string[]
+  propVariables: string[]
   methods: boolean
+  isSfc: boolean
 }
 
 export {
-  SetupState,
+  Collector,
 }

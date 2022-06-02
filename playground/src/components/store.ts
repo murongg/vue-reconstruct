@@ -5,6 +5,17 @@ import { convertScript as sfcConvertScript } from '@vue-reconstruct/sfc'
 const welcomeCode = `
 import searchBar from 'xxx'
 export default {
+  props: {
+    a: Boolean,
+    b: {
+      type: String,
+      default: ''
+    },
+    c: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     searchBar,
   },
@@ -21,6 +32,10 @@ export default {
   },
   async mounted() {
     await this.fetchBannerList();
+  },
+  created() {
+    console.log(this.a)
+    this.b + this.c
   },
   methods: {
     async fetchBannerList() {
@@ -68,7 +83,7 @@ export class ReplStore {
     this.state = reactive({
       code: welcomeCode,
       convertedCode: '',
-      type: 'sfc'
+      type: 'composition-api'
     })
 
 

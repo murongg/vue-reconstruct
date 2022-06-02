@@ -1,7 +1,7 @@
 import j from 'jscodeshift'
 import { hasComplexType } from '@vue-reconstruct/shared'
-import type { SetupState } from '../types'
-export function dataHandler(astCollection: j.Collection, setupState: SetupState): j.Collection {
+import type { Collector } from '../types'
+export function dataHandler(astCollection: j.Collection, collector: Collector): j.Collection {
   const dataOptionCollection = astCollection
     .find(j.Property, {
       key: {
@@ -34,7 +34,7 @@ export function dataHandler(astCollection: j.Collection, setupState: SetupState)
     dataOptionCollection.find(j.FunctionExpression).forEach((path) => {
       path.value.body.body.forEach((body) => {
         if (body.type !== 'ReturnStatement')
-          setupState.setupFn.body.body.push(body)
+          collector.setupFn.body.body.push(body)
       })
     })
     /*
@@ -69,13 +69,13 @@ export function dataHandler(astCollection: j.Collection, setupState: SetupState)
 
   if (dataProperties.length) {
     if (dataProperties.some(p => !p.state))
-      setupState.newImports.vue.push('ref')
+      collector.newImports.vue.push('ref')
 
     if (dataProperties.some(p => p.state))
-      setupState.newImports.vue.push('reactive')
+      collector.newImports.vue.push('reactive')
 
     for (const property of dataProperties) {
-      setupState.setupFn.body.body.push(
+      collector.setupFn.body.body.push(
         j.variableDeclaration('const', [
           j.variableDeclarator(
             j.identifier(property.name),
@@ -86,12 +86,12 @@ export function dataHandler(astCollection: j.Collection, setupState: SetupState)
           ),
         ]),
       );
-      (setupState.returnStatement.argument as j.ObjectExpression).properties.push(
+      (collector.returnStatement.argument as j.ObjectExpression).properties.push(
         j.property('init', j.identifier(property.name), j.identifier(property.name)),
       )
-      setupState.variables.push(property.name)
+      collector.variables.push(property.name)
       if (!property.state)
-        setupState.valueWrappers.push(property.name)
+        collector.valueWrappers.push(property.name)
     }
   }
 

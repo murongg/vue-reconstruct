@@ -1,9 +1,9 @@
 import type { Identifier } from 'jscodeshift'
 import j from 'jscodeshift'
 import { buildArrowFunctionExpression } from '@vue-reconstruct/shared'
-import type { SetupState } from '../types'
+import type { Collector } from '../types'
 
-export function watchHandler(astCollection: j.Collection, setupState: SetupState): j.Collection {
+export function watchHandler(astCollection: j.Collection, collector: Collector): j.Collection {
   const watchOptionCollection = astCollection
     .find(j.Property, {
       key: {
@@ -16,7 +16,7 @@ export function watchHandler(astCollection: j.Collection, setupState: SetupState
   if (!watchOption)
     return astCollection
 
-  setupState.newImports.vue.push('watch')
+  collector.newImports.vue.push('watch')
   watchOptionCollection.forEach((path) => {
     const properties = (path.value.value as j.ObjectExpression).properties as j.Property[]
     properties.forEach((property) => {
@@ -25,7 +25,7 @@ export function watchHandler(astCollection: j.Collection, setupState: SetupState
 
       if (j.Literal.check(property.key)) {
         const parts = `${property.key.value}`.split('.')
-        if (setupState.valueWrappers.includes(parts[0]))
+        if (collector.valueWrappers.includes(parts[0]))
           parts.splice(1, 0, 'value')
 
         const expression = j(parts.join('')).find(j.MemberExpression).paths()[0].value
@@ -59,7 +59,7 @@ export function watchHandler(astCollection: j.Collection, setupState: SetupState
           args.push(j.objectExpression(options))
       }
 
-      setupState.setupFn.body.body.push(j.expressionStatement(
+      collector.setupFn.body.body.push(j.expressionStatement(
         j.callExpression(
           j.identifier('watch'),
           args,

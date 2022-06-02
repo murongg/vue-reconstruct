@@ -1,10 +1,10 @@
 import type { Collection } from 'jscodeshift'
 import j from 'jscodeshift'
-import type { SetupState } from '..'
-import { LIFECYCLE_HOOKS, ROUTER_HOOKS, computedHandler, dataHandler, importHandler, lifecyclesHandler, methodsHandler, transformThis, watchHandler } from '..'
+import type { Collector } from '..'
+import { LIFECYCLE_HOOKS, ROUTER_HOOKS, computedHandler, dataHandler, importHandler, lifecyclesHandler, methodsHandler, propsHandler, setupHandler, watchHandler } from '..'
 
 export function createVueConvert(code: string, methods: boolean, isSfc?: boolean): Collection {
-  const setupState: SetupState = {
+  const collector: Collector = {
     newImports: {
       'vue': [],
       'vue-router': [],
@@ -19,7 +19,9 @@ export function createVueConvert(code: string, methods: boolean, isSfc?: boolean
     ),
     valueWrappers: [],
     variables: [],
+    propVariables: [],
     methods,
+    isSfc: !!isSfc,
   }
   const astCollection = j(code)
   // ObjectExpression
@@ -29,34 +31,23 @@ export function createVueConvert(code: string, methods: boolean, isSfc?: boolean
     throw new Error('Default export not found')
 
   // Data
-  dataHandler(astCollection, setupState)
+  dataHandler(astCollection, collector)
+  // Props
+  propsHandler(astCollection, collector)
   // Computed
-  computedHandler(astCollection, setupState)
+  computedHandler(astCollection, collector)
   // Watch
-  watchHandler(astCollection, setupState)
+  watchHandler(astCollection, collector)
   // Methods
-  methodsHandler(astCollection, setupState)
+  methodsHandler(astCollection, collector)
 
-  lifecyclesHandler(astCollection, setupState.setupFn, LIFECYCLE_HOOKS, setupState.newImports.vue)
-  lifecyclesHandler(astCollection, setupState.setupFn, ROUTER_HOOKS, setupState.newImports['vue-router'])
-  importHandler(astCollection, setupState)
+  lifecyclesHandler(astCollection, collector.setupFn, LIFECYCLE_HOOKS, collector.newImports.vue)
+  lifecyclesHandler(astCollection, collector.setupFn, ROUTER_HOOKS, collector.newImports['vue-router'])
 
-  if (setupState.setupFn.body.body.length) {
-    if (isSfc) {
-      astCollection.find(j.ExportDefaultDeclaration).remove().insertBefore(setupState.setupFn.body.body)
-    }
-    else {
-      setupState.setupFn.body.body.push(setupState.returnStatement);
-      (componentDefinition.declaration as j.ObjectExpression).properties.push(
-        j.methodDefinition(
-          'method',
-          j.identifier('setup'),
-          setupState.setupFn,
-        ) as unknown as j.ObjectProperty,
-      )
-    }
-    // Remove `this`
-    transformThis(astCollection, setupState.variables, setupState.valueWrappers, isSfc)
-  }
+  importHandler(astCollection, collector)
+
+  if (collector.setupFn.body.body.length)
+    setupHandler(astCollection, collector)
+
   return astCollection
 }

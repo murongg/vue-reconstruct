@@ -23,10 +23,16 @@ export function propsHandler(astCollection: j.Collection, collector: Collector):
       collector.propVariables.push(node.name)
     }
     if (collector.isSfc) {
-      collector.setupFn.body.body.push(j.expressionStatement(j.callExpression(
-        j.identifier('defineProps'),
-        [propsCollection],
-      )))
+
+      collector.setupFn.body.body.push(j.variableDeclaration('const', [
+        j.variableDeclarator(
+          j.identifier('props'),
+          j.callExpression(
+            j.identifier('defineProps'),
+            [propsCollection],
+          ),
+        ),
+      ]))
     }
     else {
       collector.setupFn.params.push(j.identifier('props'))

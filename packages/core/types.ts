@@ -7,6 +7,7 @@ interface Collector {
   }
   returnStatement: j.ReturnStatement
   setupFn: j.FunctionExpression
+  setupContext: string[]
   valueWrappers: string[]
   variables: string[]
   propVariables: string[]

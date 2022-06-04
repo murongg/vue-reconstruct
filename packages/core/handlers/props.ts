@@ -33,9 +33,6 @@ export function propsHandler(astCollection: j.Collection, collector: Collector):
         ),
       ]))
     }
-    else {
-      collector.setupFn.params.push(j.identifier('props'))
-    }
   }
   return astCollection
 }

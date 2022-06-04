@@ -6,3 +6,5 @@ export function hasComplexType(value: any) {
     || j.FunctionExpression.check(value)
     || j.ClassExpression.check(value)
 }
+
+export const hasEmptyArrar = (arr: any[]) => !arr.length

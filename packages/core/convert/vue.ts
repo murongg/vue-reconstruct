@@ -1,7 +1,7 @@
 import type { Collection } from 'jscodeshift'
 import j from 'jscodeshift'
 import type { Collector } from '..'
-import { LIFECYCLE_HOOKS, ROUTER_HOOKS, computedHandler, dataHandler, importHandler, lifecyclesHandler, methodsHandler, propsHandler, setupHandler, watchHandler } from '..'
+import { LIFECYCLE_HOOKS, ROUTER_HOOKS, computedHandler, dataHandler, emitHandler, importHandler, lifecyclesHandler, methodsHandler, propsHandler, setupHandler, watchHandler } from '..'
 
 export function createVueConvert(code: string, methods: boolean, isSfc?: boolean): Collection {
   const collector: Collector = {
@@ -20,6 +20,7 @@ export function createVueConvert(code: string, methods: boolean, isSfc?: boolean
     valueWrappers: [],
     variables: [],
     propVariables: [],
+    setupContext: [],
     methods,
     isSfc: !!isSfc,
   }
@@ -34,6 +35,8 @@ export function createVueConvert(code: string, methods: boolean, isSfc?: boolean
   dataHandler(astCollection, collector)
   // Props
   propsHandler(astCollection, collector)
+  // Emit
+  emitHandler(astCollection, collector)
   // Computed
   computedHandler(astCollection, collector)
   // Watch

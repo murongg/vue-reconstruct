@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<(e: 'change', value: string) => void>()
 
 const el = ref()
-const needAutoResize = inject('autoresize')
+// const needAutoResize = inject('autoresize')
 
 onMounted(() => {
   const addonOptions = {

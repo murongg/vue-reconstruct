@@ -32,8 +32,9 @@ export default {
   },
   async mounted() {
     await this.fetchBannerList();
+    this.$emit('change6', this.a)
   },
-  created() {
+  created({so,sk}) {
     console.log(this.a)
     this.b + this.c
   },
@@ -51,6 +52,13 @@ export default {
           console.log("err", err);
         });
     },
+    testEmit() {
+      this.$emit('change1', 'test msg')
+      this.$emit('change2', {})
+      this.$emit('change3', [])
+      this.$emit('change4', this.host)
+      this.$emit('change5', this.a)
+    }
   },
 };
 `.trim()

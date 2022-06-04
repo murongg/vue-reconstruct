@@ -1,9 +1,27 @@
+import { hasEmptyArrar } from '@vue-reconstruct/shared'
 import type { ASTPath } from 'jscodeshift'
 import j from 'jscodeshift'
 import type { Collector } from '..'
 
 export function setupHandler(astCollection: j.Collection, collector: Collector) {
-  const { variables, valueWrappers, propVariables, isSfc } = collector
+  const { variables, valueWrappers, propVariables, isSfc, setupContext, setupFn } = collector
+
+  /**
+    setup(props, { emit, slot, x, x })
+   */
+  if (!hasEmptyArrar(propVariables) && !isSfc)
+    setupFn.params.push(j.identifier('props'))
+
+  if (!hasEmptyArrar(setupContext) && !isSfc) {
+    const contextPattern = setupContext.map((ctx) => {
+      const property = j.property('init', j.identifier(ctx), j.identifier(ctx))
+      property.shorthand = true
+      return property
+    })
+    const objectPattern = j.objectPattern(contextPattern)
+    setupFn.params[0] = j.identifier('props')
+    setupFn.params[1] = objectPattern
+  }
 
   const joinValue = (name: string, path: ASTPath) => {
     // Remove this
@@ -34,16 +52,17 @@ export function setupHandler(astCollection: j.Collection, collector: Collector) 
           do someting....
         }
       }
-     */
+   */
   const componentDefinition = astCollection.find(j.ExportDefaultDeclaration).nodes()[0]
-  collector.setupFn.body.body.push(collector.returnStatement);
+  setupFn.body.body.push(collector.returnStatement);
   (componentDefinition.declaration as j.ObjectExpression).properties.push(
     j.methodDefinition(
       'method',
       j.identifier('setup'),
-      collector.setupFn,
+      setupFn,
     ) as unknown as j.ObjectProperty,
   )
+
   astCollection
     .find(j.MethodDefinition, {
       key: {
@@ -60,7 +79,7 @@ export function setupHandler(astCollection: j.Collection, collector: Collector) 
 
     astCollection.find(j.ExportDefaultDeclaration)
       .remove()
-      .insertBefore(collector.setupFn.body.body)
+      .insertBefore(setupFn.body.body)
 
     astCollection.find(j.ReturnStatement)
       .remove()

@@ -53,7 +53,11 @@ export function setupHandler(astCollection: j.Collection, collector: Collector) 
         }
       }
    */
-  const componentDefinition = astCollection.find(j.ExportDefaultDeclaration).nodes()[0]
+  const componentDefinition = astCollection.find(j.ExportDefaultDeclaration).nodes()[0];
+  // set return object `shorthand`
+  (collector.returnStatement.argument as j.ObjectExpression).properties.forEach((prop) => {
+    (prop as j.Property).shorthand = true
+  })
   setupFn.body.body.push(collector.returnStatement);
   (componentDefinition.declaration as j.ObjectExpression).properties.push(
     j.methodDefinition(

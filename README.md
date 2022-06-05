@@ -19,11 +19,39 @@ Help you quickly upgrade from Vue2 to Vue3. Provide CLI tools, it is convenient 
   <a/>
   <img align="middle" src="https://img.shields.io/badge/jscodeshift-v0.13.1-yellowgreen">
   <img align="middle" src="https://img.shields.io/github/languages/top/murongg/vue-reconstruct">
-</p> 
+</p>
 
+## ✈️ Feature Supports
+- [ ] vue script
+  - [x] data
+    - [x] ref
+    - [x] reactive
+  - [x] props
+    - [x] defineProps
+    - [x] setup(props) 
+  - [x] watch
+  - [x] computed 
+  - [x] methods 
+  - [x] emit
+    - [x] defineEmits
+    - [x] setup(props, { emit }) 
+  - [x] lifecycle
+    - [x] beforeCreate 
+    - [x] created
+    - [x] beforeMount
+    - [x] mounted
+    - [x] beforeUpdate
+    - [x] updated
+    - [x] errorCaptured
+    - [x] renderTracked
+    - [x] renderTriggered
+    - [x] beforeDestroy
+    - [x] destroyed
+    - [x] activated
+    - [x] deactivated
+  - [ ] ……
 
 ## 💗 Thanks
 
 - [caozhong1996/vue-codemod](https://github.com/caozhong1996/vue-codemod)
 
-Other Wrting……

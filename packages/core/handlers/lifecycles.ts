@@ -1,5 +1,7 @@
 import j from 'jscodeshift'
 
+export const SETUP_LIFECYCLES = ['beforeCreate', 'created']
+
 export const LIFECYCLE_HOOKS = {
   beforeCreate: 'setup',
   created: 'setup',
@@ -50,8 +52,7 @@ export function lifecyclesHandler(
     }).forEach((path) => {
       const name = (path.node.key as j.Identifier).name
       const nodeValue = path.node.value as j.FunctionExpression
-
-      if (name === 'created') {
+      if (SETUP_LIFECYCLES.includes(name)) {
         nodeValue.body.body.forEach((b) => {
           setupFn.body.body.push(b)
         })

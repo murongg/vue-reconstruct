@@ -13,8 +13,6 @@ export function methodsHandler(astCollection: j.Collection, collector: Collector
   if (!methodsOption)
     return astCollection
 
-  collector.newImports.vue.push('watch')
-
   const methodsProperties = (methodsOption.value as j.ObjectExpression).properties as j.Property[]
   methodsProperties.forEach((property) => {
     const propertyName = (property.key as j.Identifier).name

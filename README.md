@@ -21,7 +21,7 @@ Help you quickly upgrade from Vue2 to Vue3. Provide CLI tools, it is convenient 
   <img align="middle" src="https://img.shields.io/github/languages/top/murongg/vue-reconstruct">
 </p>
 
-## ✈️ Feature Supports
+## ✈️ Support Features
 - [ ] vue script
   - [x] data
     - [x] ref

@@ -34,7 +34,7 @@ export default {
     await this.fetchBannerList();
     this.$emit('change6', this.a)
   },
-  created({so,sk}) {
+  created() {
     console.log(this.a)
     this.b + this.c
   },

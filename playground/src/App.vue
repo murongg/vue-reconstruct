@@ -3,7 +3,7 @@ import { provide, ref } from 'vue'
 import { ReplStore } from './components/store'
 import Outputor from './components/output.vue'
 import Editor from './components/Editor.vue'
-
+import Header from './components/Header.vue'
 const replStore = new ReplStore()
 
 provide('store', replStore)
@@ -17,12 +17,12 @@ const handleSelectChange = () => {
 <template>
   <div class="flex flex-col">
 
-    <header class="w-screen h-13 mb-2 flex items-center px-3" style="background-color: #42b883">
+    <Header>
       <select @change="handleSelectChange" v-model="replStore.state.type">
         <option value="composition-api">composition-api</option>
         <option value="sfc">sfc</option>
       </select>
-    </header>
+    </Header>
 
     <div id="app">
       <div class="left">

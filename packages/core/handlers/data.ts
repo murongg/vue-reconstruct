@@ -1,5 +1,4 @@
 import j from 'jscodeshift'
-import { hasComplexType } from '@vue-reconstruct/shared'
 import type { Collector } from '../types'
 export function dataHandler(astCollection: j.Collection, collector: Collector): j.Collection {
   const dataOptionCollection = astCollection
@@ -64,7 +63,9 @@ export function dataHandler(astCollection: j.Collection, collector: Collector): 
     = objectProperties.map(node => ({
       name: (node.key as j.Identifier).name,
       value: node.value,
-      state: hasComplexType(node.value),
+      // state: hasComplexType(node.value),
+      // default ref
+      state: false,
     }))
 
   if (dataProperties.length) {

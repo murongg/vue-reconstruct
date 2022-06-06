@@ -1,27 +1,20 @@
 <script lang="ts" setup>
-import { provide, ref } from 'vue'
-import { ReplStore } from './components/store'
 import Outputor from './components/output.vue'
 import Editor from './components/Editor.vue'
 import Header from './components/Header.vue'
+import { provide } from 'vue'
+import { ReplStore } from './components/store'
+
 const replStore = new ReplStore()
 
 provide('store', replStore)
-
-const handleSelectChange = () => {
-  replStore.changeCode()
-}
-
 </script>
 
 <template>
   <div class="flex flex-col">
 
     <Header>
-      <select @change="handleSelectChange" v-model="replStore.state.type">
-        <option value="composition-api">composition-api</option>
-        <option value="sfc">sfc</option>
-      </select>
+     
     </Header>
 
     <div id="app">

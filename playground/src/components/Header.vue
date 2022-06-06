@@ -10,6 +10,11 @@ const handleSelectChange = () => {
   replStore.changeCode()
 }
 
+const changeType = (type: string) => {
+  replStore.state.type = type
+  replStore.state.childType = Object.keys(templates[type].types)[0]
+}
+
 </script>
 
 <template>
@@ -20,7 +25,7 @@ const handleSelectChange = () => {
       <ul class="list-none flex items-center">
         <li
           :class="['cursor-pointer', 'px-3', index === 0 ? '' : 'border-l', item === replStore.state.type ? 'text-light-50 text-lg' : 'text-light-500']"
-          v-for="(item, index) in Object.keys(templates)" :key="item">{{ item }}</li>
+          @click="changeType(item)" v-for="(item, index) in Object.keys(templates)" :key="item">{{ item }}</li>
       </ul>
     </nav>
     <select @change="handleSelectChange" v-model="replStore.state.childType">

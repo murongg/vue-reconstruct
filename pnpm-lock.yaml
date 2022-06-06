@@ -65,6 +65,12 @@ importers:
   packages/shared:
     specifiers: {}
 
+  packages/vuex:
+    specifiers:
+      '@vue-reconstruct/shared': workspace:*
+    dependencies:
+      '@vue-reconstruct/shared': link:../shared
+
   playground:
     specifiers:
       '@types/codemirror': ^5.60.5
@@ -72,6 +78,7 @@ importers:
       '@vitejs/plugin-vue': ^2.0.0
       '@vue-reconstruct/composition-api': workspace:*
       '@vue-reconstruct/sfc': workspace:*
+      '@vue-reconstruct/vuex': workspace:*
       assert: ^2.0.0
       codemirror: ^5.65.0
       typescript: ^4.4.4
@@ -83,6 +90,7 @@ importers:
     dependencies:
       '@vue-reconstruct/composition-api': link:../packages/composition-api
       '@vue-reconstruct/sfc': link:../packages/sfc
+      '@vue-reconstruct/vuex': link:../packages/vuex
       codemirror: 5.65.4
       unocss: 0.37.0_vite@2.9.1
       vue: 3.2.36

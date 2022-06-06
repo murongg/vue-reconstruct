@@ -51,6 +51,9 @@ Help you quickly upgrade from Vue2 to Vue3. Provide CLI tools, it is convenient 
     - [x] activated
     - [x] deactivated
   - [ ] ……
+- [ ] vuex
+  - [ ] vuex 4.x
+  - [ ] pinia
 
 ## 💗 Thanks
 

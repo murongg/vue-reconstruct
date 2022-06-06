@@ -81,12 +81,13 @@ export function setupHandler(astCollection: j.Collection, collector: Collector) 
     // push defineProps
     // remove `export default` and `return`
 
+    const returnStatementIndex = setupFn.body.body.findIndex(path => path.type === 'ReturnStatement')
+    if (returnStatementIndex !== -1)
+      setupFn.body.body.splice(returnStatementIndex, 1)
+
     astCollection.find(j.ExportDefaultDeclaration)
       .remove()
       .insertBefore(setupFn.body.body)
-
-    astCollection.find(j.ReturnStatement)
-      .remove()
   }
 
   // when variables are assigned

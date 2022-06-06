@@ -1,13 +1,9 @@
 import j from 'jscodeshift'
-import { buildArrowFunctionExpression, buildFunctionDeclaration } from '@vue-reconstruct/shared'
+import { buildArrowFunctionExpression, buildFunctionDeclaration, findProperty } from '@vue-reconstruct/shared'
 import type { Collector } from '../types'
 
 export function methodsHandler(astCollection: j.Collection, collector: Collector): j.Collection {
-  const methodsOptionCollection = astCollection.find(j.Property, {
-    key: {
-      name: 'methods',
-    },
-  }).filter(path => path.parent.parent.value.type === 'ExportDefaultDeclaration')
+  const methodsOptionCollection = findProperty(astCollection, 'methods')
   const methodsOption = methodsOptionCollection.nodes()[0]
 
   if (!methodsOption)

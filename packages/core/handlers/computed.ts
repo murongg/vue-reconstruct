@@ -1,14 +1,9 @@
 import j from 'jscodeshift'
-import { buildArrowFunctionExpression } from '@vue-reconstruct/shared'
+import { buildArrowFunctionExpression, findProperty } from '@vue-reconstruct/shared'
 import type { Collector } from '../types'
 
 export function computedHandler(astCollection: j.Collection, collector: Collector): j.Collection {
-  const computedOptionCollection = astCollection
-    .find(j.Property, {
-      key: {
-        name: 'computed',
-      },
-    }).filter(path => path.parent.parent.value.type === 'ExportDefaultDeclaration')
+  const computedOptionCollection = findProperty(astCollection, 'computed')
 
   const computedOption = computedOptionCollection.nodes()[0]
 

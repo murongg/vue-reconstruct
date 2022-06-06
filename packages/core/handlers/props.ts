@@ -1,13 +1,9 @@
+import { findProperty } from '@vue-reconstruct/shared'
 import j from 'jscodeshift'
 import type { Collector } from '../types'
 
 export function propsHandler(astCollection: j.Collection, collector: Collector): j.Collection {
-  const propsOptionCollection = astCollection
-    .find(j.Property, {
-      key: {
-        name: 'props',
-      },
-    }).filter(path => path.parent.parent.value.type === 'ExportDefaultDeclaration')
+  const propsOptionCollection = findProperty(astCollection, 'props')
 
   const propsOption = propsOptionCollection.nodes()[0]
   if (propsOption) {

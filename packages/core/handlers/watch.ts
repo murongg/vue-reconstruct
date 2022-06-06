@@ -1,15 +1,10 @@
 import type { Identifier } from 'jscodeshift'
 import j from 'jscodeshift'
-import { buildArrowFunctionExpression } from '@vue-reconstruct/shared'
+import { buildArrowFunctionExpression, findProperty } from '@vue-reconstruct/shared'
 import type { Collector } from '../types'
 
 export function watchHandler(astCollection: j.Collection, collector: Collector): j.Collection {
-  const watchOptionCollection = astCollection
-    .find(j.Property, {
-      key: {
-        name: 'watch',
-      },
-    }).filter(path => path.parent.parent.value.type === 'ExportDefaultDeclaration')
+  const watchOptionCollection = findProperty(astCollection, 'watch')
 
   const watchOption = watchOptionCollection.nodes()[0]
 

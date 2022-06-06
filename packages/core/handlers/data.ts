@@ -1,13 +1,8 @@
+import { findProperty } from '@vue-reconstruct/shared'
 import j from 'jscodeshift'
 import type { Collector } from '../types'
 export function dataHandler(astCollection: j.Collection, collector: Collector): j.Collection {
-  const dataOptionCollection = astCollection
-    .find(j.Property, {
-      key: {
-        name: 'data',
-      },
-    })
-    .filter(path => path.parent.parent.value.type === 'ExportDefaultDeclaration')
+  const dataOptionCollection = findProperty(astCollection, 'data')
   const dataOption = dataOptionCollection.nodes()[0]
   let objectProperties: j.ObjectProperty[] = []
   if (dataOption.value.type === 'FunctionExpression') {

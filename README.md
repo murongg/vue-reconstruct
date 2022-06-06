@@ -50,6 +50,15 @@ Help you quickly upgrade from Vue2 to Vue3. Provide CLI tools, it is convenient 
     - [x] destroyed
     - [x] activated
     - [x] deactivated
+  - [ ] vuex
+    - [ ] mapState
+    - [ ] mapGetters
+    - [x] mapMutations
+    - [x] mapActions
+    - [ ] vuex 4.x
+      - [x] useStore 
+    - [ ] pinia
+      - [ ] useStore
   - [ ] ……
 - [ ] vuex
   - [ ] vuex 4.x

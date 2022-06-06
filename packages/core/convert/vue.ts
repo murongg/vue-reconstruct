@@ -8,6 +8,7 @@ export function createVueConvert(code: string, methods: boolean, isSfc?: boolean
     newImports: {
       'vue': [],
       'vue-router': [],
+      'vuex': [],
     },
     returnStatement: j.returnStatement(
       j.objectExpression([]),
@@ -21,6 +22,12 @@ export function createVueConvert(code: string, methods: boolean, isSfc?: boolean
     variables: [],
     propVariables: [],
     setupContext: [],
+    vuexMap: {
+      state: [],
+      getters: [],
+      actions: [],
+      mutations: [],
+    },
     methods,
     isSfc: !!isSfc,
   }

@@ -1,5 +1,5 @@
 import j from 'jscodeshift'
-import type { Collector } from '../types'
+import type { Collector, Imports } from '../types'
 
 export function importHandler(astCollection: j.Collection, collector: Collector): j.Collection {
   function importInsert(key: string, importKeys: string[]) {
@@ -11,9 +11,9 @@ export function importHandler(astCollection: j.Collection, collector: Collector)
     astCollection.find(j.ExportDefaultDeclaration).insertBefore(imports)
   }
 
-  importInsert('vue', [...new Set(collector.newImports.vue)])
-  importInsert('vue-router', [...new Set(collector.newImports['vue-router'])])
-
+  Object.keys(collector.newImports).forEach((key) => {
+    importInsert(key, [...new Set(collector.newImports[key as Imports])])
+  })
   return astCollection
 }
 

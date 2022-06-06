@@ -1,9 +1,10 @@
 import type j from 'jscodeshift'
 
+type VuexMap = 'state' | 'getters' | 'actions' | 'mutations'
+type Imports = 'vue' | 'vue-router' | 'vuex'
 interface Collector {
   newImports: {
-    vue: string[]
-    'vue-router': string[]
+    [x in Imports]: string[]
   }
   returnStatement: j.ReturnStatement
   setupFn: j.FunctionExpression
@@ -11,10 +12,15 @@ interface Collector {
   valueWrappers: string[]
   variables: string[]
   propVariables: string[]
+  vuexMap: {
+    [x in VuexMap]: string[]
+  }
   methods: boolean
   isSfc: boolean
 }
 
 export {
   Collector,
+  VuexMap,
+  Imports,
 }

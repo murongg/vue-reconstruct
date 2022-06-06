@@ -4,7 +4,7 @@ import j from 'jscodeshift'
 import type { Collector } from '..'
 
 export function setupHandler(astCollection: j.Collection, collector: Collector) {
-  const { variables, valueWrappers, propVariables, isSfc, setupContext, setupFn } = collector
+  const { variables, valueWrappers, propVariables, isSfc, setupContext, setupFn, vuexMap } = collector
 
   /**
     setup(props, { emit, slot, x, x })
@@ -32,6 +32,20 @@ export function setupHandler(astCollection: j.Collection, collector: Collector) 
     // Props wrapper
     if (propVariables.includes(name))
       parentObject = j.memberExpression(j.identifier('props'), parentObject)
+
+    // store mapActions wrapper
+    if (vuexMap.actions.includes(name)) {
+      const pathCaller = j.callExpression(j.identifier('store.dispatch'), [j.stringLiteral(name), ...path.parentPath.value.arguments])
+      path.parentPath.replace(pathCaller)
+      return
+    }
+
+    // store mapActions wrapper
+    if (vuexMap.mutations.includes(name)) {
+      const pathCaller = j.callExpression(j.identifier('store.commit'), [j.stringLiteral(name), ...path.parentPath.value.arguments])
+      path.parentPath.replace(pathCaller)
+      return
+    }
 
     path.replace(parentObject)
   }

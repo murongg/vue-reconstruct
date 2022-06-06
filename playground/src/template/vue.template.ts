@@ -45,6 +45,17 @@ export default {
     }
   },  
   methods: {
+    ...mapActions([
+      'increment',
+      'increment2'
+    ]),
+    ...mapMutations([
+      'increment3',
+    ]),
+    teatActions() {
+      this.increment(123)
+      this.increment3(123)
+    },
     async fetchBannerList() {
       await this.$http
         .post("xxxx")

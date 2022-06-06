@@ -7,6 +7,7 @@ describe('test vue', () => {
     newImports: {
       'vue': [],
       'vue-router': [],
+      'vuex': [],
     },
     returnStatement: j.returnStatement(
       j.objectExpression([]),
@@ -20,6 +21,12 @@ describe('test vue', () => {
     variables: [],
     propVariables: [],
     setupContext: [],
+    vuexMap: {
+      state: [],
+      getters: [],
+      actions: [],
+      mutations: [],
+    },
     methods: false,
     isSfc: false,
   }

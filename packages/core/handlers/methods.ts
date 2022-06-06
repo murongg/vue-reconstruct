@@ -11,6 +11,37 @@ export function methodsHandler(astCollection: j.Collection, collector: Collector
 
   const methodsProperties = (methodsOption.value as j.ObjectExpression).properties as j.Property[]
   methodsProperties.forEach((property) => {
+    if ((property as any).type === 'SpreadElement') {
+      const argument = (property as unknown as j.SpreadElement).argument
+      if (argument.type === 'CallExpression' && argument.arguments[0].type === 'ArrayExpression') {
+        collector.newImports.vuex.push('useStore')
+        // const store = useStore();
+        collector.setupFn.body.body.push(
+          j.variableDeclaration('const', [
+            j.variableDeclarator(
+              j.identifier('store'),
+              j.callExpression(
+                j.identifier('useStore'),
+                [],
+              ),
+            ),
+          ]),
+        )
+        // collect `vuex` helper function property
+        // mapMutations / mapActions
+        argument.arguments[0].elements.forEach((el) => {
+          const calleeName = (argument.callee as j.Identifier).name
+          const propertyName = (el as any).value
+          if (calleeName === 'mapActions')
+            collector.vuexMap.actions.push(propertyName)
+          else if (calleeName === 'mapMutations')
+            collector.vuexMap.mutations.push(propertyName)
+
+          collector.variables.push(propertyName)
+        })
+      }
+      return
+    }
     const propertyName = (property.key as j.Identifier).name
     const propertyValue = property.value as j.FunctionExpression
     if (collector.methods) {

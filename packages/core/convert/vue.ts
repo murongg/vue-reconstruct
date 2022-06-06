@@ -1,7 +1,7 @@
 import type { Collection } from 'jscodeshift'
 import j from 'jscodeshift'
 import type { Collector } from '..'
-import { LIFECYCLE_HOOKS, ROUTER_HOOKS, computedHandler, dataHandler, emitHandler, importHandler, lifecyclesHandler, methodsHandler, propsHandler, setupHandler, watchHandler } from '..'
+import { LIFECYCLE_HOOKS, ROUTER_HOOKS, computedHandler, dataHandler, emitHandler, filtersHandler, importHandler, lifecyclesHandler, methodsHandler, propsHandler, setupHandler, watchHandler } from '..'
 
 export function createVueConvert(code: string, methods: boolean, isSfc?: boolean): Collection {
   const collector: Collector = {
@@ -43,6 +43,8 @@ export function createVueConvert(code: string, methods: boolean, isSfc?: boolean
   watchHandler(astCollection, collector)
   // Methods
   methodsHandler(astCollection, collector)
+  // Filters
+  filtersHandler(astCollection, collector)
 
   lifecyclesHandler(astCollection, collector.setupFn, LIFECYCLE_HOOKS, collector.newImports.vue)
   lifecyclesHandler(astCollection, collector.setupFn, ROUTER_HOOKS, collector.newImports['vue-router'])

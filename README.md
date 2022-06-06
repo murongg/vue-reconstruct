@@ -32,6 +32,7 @@ Help you quickly upgrade from Vue2 to Vue3. Provide CLI tools, it is convenient 
   - [x] watch
   - [x] computed 
   - [x] methods 
+  - [x] filters 
   - [x] emit
     - [x] defineEmits
     - [x] setup(props, { emit }) 

@@ -28,7 +28,7 @@ export function lifecyclesHandler(
   astCollection: j.Collection,
   setupFn: j.FunctionExpression,
   hookList: string[] | Record<string, string>,
-  importList: string[],
+  importList: Set<string>,
 ): j.Collection {
   if (Array.isArray(hookList)) {
     astCollection
@@ -37,7 +37,7 @@ export function lifecyclesHandler(
       .forEach((path) => {
         const name = (path.node.key as j.Identifier).name
         const hookName = `on${name.charAt(0).toUpperCase() + name.slice(1)}`
-        importList.push(hookName)
+        importList.add(hookName)
         setupFn.body.body.push(j.expressionStatement(
           j.callExpression(
             j.identifier(hookName),
@@ -60,7 +60,7 @@ export function lifecyclesHandler(
       }
       else {
         const hookName = hookList[name]
-        importList.push(hookName)
+        importList.add(hookName)
         const arrowFunction = j.arrowFunctionExpression([], nodeValue.body)
         arrowFunction.async = nodeValue.async
         setupFn.body.body.push(j.expressionStatement(

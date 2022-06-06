@@ -8,7 +8,7 @@ export function computedHandler(astCollection: j.Collection, collector: Collecto
   const computedOption = computedOptionCollection.nodes()[0]
 
   if (computedOption) {
-    collector.newImports.vue.push('computed')
+    collector.newImports.vue.add('computed')
     if (!j.ObjectExpression.check(computedOption.value))
       throw new Error('No return statement found in computed option')
 

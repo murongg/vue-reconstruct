@@ -6,9 +6,9 @@ import { LIFECYCLE_HOOKS, ROUTER_HOOKS, computedHandler, dataHandler, emitHandle
 export function createVueConvert(code: string, methods: boolean, isSfc?: boolean): Collection {
   const collector: Collector = {
     newImports: {
-      'vue': [],
-      'vue-router': [],
-      'vuex': [],
+      'vue': new Set(),
+      'vue-router': new Set(),
+      'vuex': new Set(),
     },
     returnStatement: j.returnStatement(
       j.objectExpression([]),

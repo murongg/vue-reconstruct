@@ -5,9 +5,9 @@ import { dataHandler, propsHandler, watchHandler } from '..'
 describe('test vue', () => {
   const collector: Collector = {
     newImports: {
-      'vue': [],
-      'vue-router': [],
-      'vuex': [],
+      'vue': new Set(),
+      'vue-router': new Set(),
+      'vuex': new Set(),
     },
     returnStatement: j.returnStatement(
       j.objectExpression([]),
@@ -108,6 +108,6 @@ export default {
   })
   it('property: watch', () => {
     watchHandler(ast, collector)
-    expect(collector.newImports.vue).toContain('watch')
+    expect([...collector.newImports.vue]).toContain('watch')
   })
 })

@@ -65,10 +65,10 @@ export function dataHandler(astCollection: j.Collection, collector: Collector): 
 
   if (dataProperties.length) {
     if (dataProperties.some(p => !p.state))
-      collector.newImports.vue.push('ref')
+      collector.newImports.vue.add('ref')
 
     if (dataProperties.some(p => p.state))
-      collector.newImports.vue.push('reactive')
+      collector.newImports.vue.add('reactive')
 
     for (const property of dataProperties) {
       collector.setupFn.body.body.push(

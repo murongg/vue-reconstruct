@@ -4,7 +4,7 @@ type VuexMap = 'state' | 'getters' | 'actions' | 'mutations'
 type Imports = 'vue' | 'vue-router' | 'vuex'
 interface Collector {
   newImports: {
-    [x in Imports]: string[]
+    [x in Imports]: Set<string>
   }
   returnStatement: j.ReturnStatement
   setupFn: j.FunctionExpression

@@ -14,19 +14,22 @@ export function methodsHandler(astCollection: j.Collection, collector: Collector
     if ((property as any).type === 'SpreadElement') {
       const argument = (property as unknown as j.SpreadElement).argument
       if (argument.type === 'CallExpression' && argument.arguments[0].type === 'ArrayExpression') {
-        collector.newImports.vuex.push('useStore')
-        // const store = useStore();
-        collector.setupFn.body.body.push(
-          j.variableDeclaration('const', [
-            j.variableDeclarator(
-              j.identifier('store'),
-              j.callExpression(
-                j.identifier('useStore'),
-                [],
+        // fix: multiple add useStore
+        if (!collector.newImports.vuex.has('useStore')) {
+          collector.setupFn.body.body.push(
+            j.variableDeclaration('const', [
+              j.variableDeclarator(
+                j.identifier('store'),
+                j.callExpression(
+                  j.identifier('useStore'),
+                  [],
+                ),
               ),
-            ),
-          ]),
-        )
+            ]),
+          )
+        }
+        collector.newImports.vuex.add('useStore')
+        // const store = useStore();
         // collect `vuex` helper function property
         // mapMutations / mapActions
         argument.arguments[0].elements.forEach((el) => {

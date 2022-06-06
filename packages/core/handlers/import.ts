@@ -5,14 +5,13 @@ export function importHandler(astCollection: j.Collection, collector: Collector)
   function importInsert(key: string, importKeys: string[]) {
     if (!importKeys.length)
       return
-
     const keyIds = importKeys.map(key => j.importSpecifier(j.identifier(key)))
     const imports = j.importDeclaration(keyIds, j.literal(key))
     astCollection.find(j.ExportDefaultDeclaration).insertBefore(imports)
   }
 
   Object.keys(collector.newImports).forEach((key) => {
-    importInsert(key, [...new Set(collector.newImports[key as Imports])])
+    importInsert(key, [...collector.newImports[key as Imports]])
   })
   return astCollection
 }

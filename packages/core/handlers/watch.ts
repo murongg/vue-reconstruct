@@ -11,7 +11,7 @@ export function watchHandler(astCollection: j.Collection, collector: Collector):
   if (!watchOption)
     return astCollection
 
-  collector.newImports.vue.push('watch')
+  collector.newImports.vue.add('watch')
   watchOptionCollection.forEach((path) => {
     const properties = (path.value.value as j.ObjectExpression).properties as j.Property[]
     properties.forEach((property) => {

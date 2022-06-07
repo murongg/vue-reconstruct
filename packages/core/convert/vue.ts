@@ -1,7 +1,7 @@
 import type { Collection } from 'jscodeshift'
 import j from 'jscodeshift'
 import type { Collector } from '..'
-import { LIFECYCLE_HOOKS, ROUTER_HOOKS, computedHandler, dataHandler, emitHandler, filtersHandler, importHandler, lifecyclesHandler, methodsHandler, propsHandler, setupHandler, vuexHandler, watchHandler } from '..'
+import { LIFECYCLE_HOOKS, ROUTER_HOOKS, computedHandler, dataHandler, emitHandler, filtersHandler, importHandler, lifecyclesHandler, methodsHandler, propsHandler, refsHandler, setupHandler, vuexHandler, watchHandler } from '..'
 
 export function createVueConvert(code: string, methods: boolean, isSfc?: boolean): Collection {
   const collector: Collector = {
@@ -44,6 +44,8 @@ export function createVueConvert(code: string, methods: boolean, isSfc?: boolean
   propsHandler(astCollection, collector)
   // Emit
   emitHandler(astCollection, collector)
+  // Refs
+  refsHandler(astCollection, collector)
   // Computed
   computedHandler(astCollection, collector)
   // Watch

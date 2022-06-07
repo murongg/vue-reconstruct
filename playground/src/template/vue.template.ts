@@ -56,6 +56,10 @@ export default {
       this.increment(123)
       this.increment3(123)
     },
+    testRefs() {
+     const image = this.$refs.image()
+     const b = this.$refs.image()
+    },
     async fetchBannerList() {
       await this.$http
         .post("xxxx")

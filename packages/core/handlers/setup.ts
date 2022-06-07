@@ -34,15 +34,15 @@ export function setupHandler(astCollection: j.Collection, collector: Collector) 
       parentObject = j.memberExpression(j.identifier('props'), parentObject)
 
     // store mapActions wrapper
-    if (vuexMap.actions.includes(name)) {
-      const pathCaller = j.callExpression(j.identifier('store.dispatch'), [j.stringLiteral(name), ...path.parentPath.value.arguments])
+    if ([...vuexMap.actions.keys()].includes(name)) {
+      const pathCaller = j.callExpression(j.identifier('store.dispatch'), [vuexMap.actions.get(name), ...path.parentPath.value.arguments])
       path.parentPath.replace(pathCaller)
       return
     }
 
     // store mapActions wrapper
-    if (vuexMap.mutations.includes(name)) {
-      const pathCaller = j.callExpression(j.identifier('store.commit'), [j.stringLiteral(name), ...path.parentPath.value.arguments])
+    if ([...vuexMap.mutations.keys()].includes(name)) {
+      const pathCaller = j.callExpression(j.identifier('store.commit'), [vuexMap.mutations.get(name), ...path.parentPath.value.arguments])
       path.parentPath.replace(pathCaller)
       return
     }

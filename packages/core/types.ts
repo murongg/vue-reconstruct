@@ -13,7 +13,7 @@ interface Collector {
   variables: string[]
   propVariables: string[]
   vuexMap: {
-    [x in VuexMap]: string[]
+    [x in VuexMap]: Map<string, j.Literal>
   }
   methods: boolean
   isSfc: boolean

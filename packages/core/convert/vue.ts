@@ -1,7 +1,7 @@
 import type { Collection } from 'jscodeshift'
 import j from 'jscodeshift'
 import type { Collector } from '..'
-import { LIFECYCLE_HOOKS, ROUTER_HOOKS, computedHandler, dataHandler, emitHandler, filtersHandler, importHandler, lifecyclesHandler, methodsHandler, propsHandler, setupHandler, watchHandler } from '..'
+import { LIFECYCLE_HOOKS, ROUTER_HOOKS, computedHandler, dataHandler, emitHandler, filtersHandler, importHandler, lifecyclesHandler, methodsHandler, propsHandler, setupHandler, vuexHandler, watchHandler } from '..'
 
 export function createVueConvert(code: string, methods: boolean, isSfc?: boolean): Collection {
   const collector: Collector = {
@@ -23,10 +23,10 @@ export function createVueConvert(code: string, methods: boolean, isSfc?: boolean
     propVariables: [],
     setupContext: [],
     vuexMap: {
-      state: [],
-      getters: [],
-      actions: [],
-      mutations: [],
+      state: new Map(),
+      getters: new Map(),
+      actions: new Map(),
+      mutations: new Map(),
     },
     methods,
     isSfc: !!isSfc,
@@ -48,6 +48,9 @@ export function createVueConvert(code: string, methods: boolean, isSfc?: boolean
   computedHandler(astCollection, collector)
   // Watch
   watchHandler(astCollection, collector)
+  // Vuex
+  // Must be before of `methods`
+  vuexHandler(astCollection, collector)
   // Methods
   methodsHandler(astCollection, collector)
   // Filters
